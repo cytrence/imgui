@@ -118,6 +118,8 @@ static void ImGui_ImplSDL3_SetClipboardText(void*, const char* text)
 
 static void ImGui_ImplSDL3_SetPlatformImeData(ImGuiViewport*, ImGuiPlatformImeData* data)
 {
+    ImGui_ImplSDL3_Data* backend_data = ImGui_ImplSDL3_GetBackendData();
+
     if (data->WantVisible)
     {
         SDL_Rect r;
@@ -125,12 +127,12 @@ static void ImGui_ImplSDL3_SetPlatformImeData(ImGuiViewport*, ImGuiPlatformImeDa
         r.y = (int)data->InputPos.y;
         r.w = 1;
         r.h = (int)data->InputLineHeight;
-        SDL_SetTextInputRect(&r);
-        SDL_StartTextInput();
+        SDL_SetTextInputRect(backend_data->Window, &r);
+        SDL_StartTextInput(backend_data->Window);
     }
     else
     {
-        SDL_StopTextInput();
+        SDL_StopTextInput(backend_data->Window);
     }
 }
 
