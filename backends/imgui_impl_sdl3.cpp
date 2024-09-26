@@ -581,16 +581,20 @@ static void ImGui_ImplSDL3_UpdateMouseData()
         if (bd->MouseCanUseGlobalState && bd->MouseButtonsDown == 0)
         {
             // Single-viewport mode: mouse position in client window coordinates (io.MousePos is (0,0) when the mouse is on the upper-left corner of the app window)
-            /*
+
+#if NOT_CYTRENCE
             float mouse_x_global, mouse_y_global;
             int window_x, window_y;
             SDL_GetGlobalMouseState(&mouse_x_global, &mouse_y_global);
             SDL_GetWindowPosition(focused_window, &window_x, &window_y);
             io.AddMousePosEvent(mouse_x_global - window_x, mouse_y_global - window_y);
-             */
+#else
+            // Fix mouse offset on notched MacBook screens
+            // - Use window-relative mouse position instead of calculating from global mouse state.
             float mouse_x, mouse_y;
             SDL_GetMouseState(&mouse_x, &mouse_y);
             io.AddMousePosEvent(mouse_x, mouse_y);
+#endif
         }
     }
 }
